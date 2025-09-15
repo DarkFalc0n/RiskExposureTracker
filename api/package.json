@@ -1,0 +1,13 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "dotnet run watch",
+    "build": "dotnet build",
+    "start": "dotnet run"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
