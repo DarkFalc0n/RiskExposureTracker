@@ -38,7 +38,6 @@ namespace RiskManagement.Controllers
                 return NotFound(new { message = $"Risk with ID {id} not found." });
             }
 
-            // Update only editable fields (don’t update primary key or createdAt)
             risk.Category = updatedRisk.Category;
             risk.Description = updatedRisk.Description;
             risk.Exposure = updatedRisk.Exposure;
@@ -51,3 +50,4 @@ namespace RiskManagement.Controllers
         }
     }
 }
+
