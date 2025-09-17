@@ -1,3 +1,8 @@
+// risk reports dependency add
+/*builder.Services.AddScoped<IRiskReportsRepository, RiskReportsRepository>();
+builder.Services.AddScoped<IRiskReportsService, RiskReportsService>();
+*/
+
 using Microsoft.AspNetCore.Mvc;
 using capstone1.Models;
 using capstone1.Services;
@@ -57,3 +62,4 @@ namespace capstone1.Controllers
         }
     }
 }
+
