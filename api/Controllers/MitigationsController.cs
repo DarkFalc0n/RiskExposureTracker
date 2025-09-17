@@ -1,3 +1,9 @@
+// dependencies : in program.cs
+/*builder.Services.AddScoped<IMitigationsRepository, MitigationsRepository>();
+builder.Services.AddScoped<IMitigationsService, MitigationsService>();
+*/
+
+
 using capstone1.Models;
 using capstone1.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -53,3 +59,4 @@ namespace capstone1.Controllers
         }
     }
 }
+
