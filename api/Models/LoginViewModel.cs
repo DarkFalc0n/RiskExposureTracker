@@ -1,4 +1,4 @@
-// LoginViewModel 
+// LoginViewModel  
 
 using System.ComponentModel.DataAnnotations;
 
