@@ -50,26 +50,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 22
-          cache: 'npm'
-          cache-dependency-path: client/package.json
+          bun-version: 1.1.x
 
-      - name: Remove lockfile
-        run: rm -f package-lock.json node_modules
+      - name: Cache Bun downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('client/package.json', 'client/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Clean install state
+        run: rm -rf node_modules package-lock.json bun.lockb
 
       - name: Install deps
-        run: npm install --force
-
-      - name: Rebuild native modules
-        run: npm rebuild --force
+        run: bun install
       
       # TODO: Add linting
       # - name: Lint
-      #   run: npm run lint --silent
+      #   run: bun run lint --silent
 
       - name: Build
-        run: npm run build --silent
+        run: bun run build
