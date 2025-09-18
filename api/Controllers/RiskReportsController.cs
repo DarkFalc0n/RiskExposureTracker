@@ -4,10 +4,10 @@ builder.Services.AddScoped<IRiskReportsService, RiskReportsService>();
 */
 
 using Microsoft.AspNetCore.Mvc;
-using capstone1.Models;
-using capstone1.Services;
+using RiskExposureTracker.Models;
+using RiskExposureTracker.Services;
 
-namespace capstone1.Controllers
+namespace RiskExposureTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,12 +20,8 @@ namespace capstone1.Controllers
             _service = service;
         }
 
-
-        // GET: api/reports/{orgId} ----------------------------------------------------------------
-
-        
         [HttpGet("{orgId}")]
-        public async Task<ActionResult<IEnumerable<RiskReports>>> GetReportsByOrg(long orgId)
+        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrg(long orgId)
         {
             var reports = await _service.GetReportsByOrgAsync(orgId);
             if (!reports.Any())
@@ -35,13 +31,11 @@ namespace capstone1.Controllers
             return Ok(reports);
         }
 
-
-
-        // GET: api/reports/{orgId}/{period} --------------------------------------------------------
-
-        
         [HttpGet("{orgId}/{period}")]
-        public async Task<ActionResult<IEnumerable<RiskReports>>> GetReportsByOrgAndPeriod(long orgId, string period)
+        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrgAndPeriod(
+            long orgId,
+            string period
+        )
         {
             var reports = await _service.GetReportsByOrgAndPeriodAsync(orgId, period);
             if (!reports.Any())
@@ -51,15 +45,11 @@ namespace capstone1.Controllers
             return Ok(reports);
         }
 
-
-        // POST: api/reports --------------------------------------------------------------------------
-        
         [HttpPost]
-        public async Task<ActionResult<RiskReports>> PostReport(RiskReports report)
+        public async Task<ActionResult<RiskReport>> PostReport(RiskReport report)
         {
             var created = await _service.CreateReportAsync(report);
             return CreatedAtAction(nameof(GetReportsByOrg), new { orgId = created.OrgId }, created);
         }
     }
 }
-

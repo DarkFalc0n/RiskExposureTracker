@@ -1,10 +1,8 @@
-﻿using CapstoneProject_RiskExposureTrackingAndReportingSystem.Models;
-using CapstoneProject_RiskExposureTrackingAndReportingSystem.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using RiskExposureTracker.Models;
+using RiskExposureTracker.Services;
 
-namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Controllers
+namespace RiskExposureTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,14 +15,12 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Controllers
             _service = service;
         }
 
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Organizations>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Organization>>> GetAll()
         {
             var orgs = await _service.GetAllOrganizationsServicAsync();
             return Ok(orgs);
         }
-
 
         [HttpGet("{orgId}")]
         public async Task<IActionResult> GetOrganization(long orgId)
@@ -37,7 +33,7 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Controllers
         }
 
         [HttpPut("{orgId}")]
-        public async Task<IActionResult> UpdateOrganization(long orgId, Organizations updatedOrg)
+        public async Task<IActionResult> UpdateOrganization(long orgId, Organization updatedOrg)
         {
             if (orgId != updatedOrg.OrgId)
                 return BadRequest("Invalid Organization Id");
@@ -46,7 +42,6 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Controllers
             if (existingOrg == null)
                 return NotFound();
 
-            
             existingOrg.Name = updatedOrg.Name;
             existingOrg.Sector = updatedOrg.Sector;
             existingOrg.Region = updatedOrg.Region;

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RiskManagement.Data;
-using RiskManagement.Models;
-using RiskManagement.Service;
+using RiskExposureTracker.Data;
+using RiskExposureTracker.Models;
+using RiskExposureTracker.Services;
 
-namespace RiskManagement.Controllers
+namespace RiskExposureTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
