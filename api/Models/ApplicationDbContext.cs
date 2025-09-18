@@ -2,7 +2,7 @@
 
 namespace RiskExposureTracker.Models
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -16,27 +16,31 @@ namespace RiskExposureTracker.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);           
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Risk>()
+            _ = modelBuilder
+                .Entity<Risk>()
                 .HasOne(r => r.Organizations)
                 .WithMany(o => o.Risks)
                 .HasForeignKey(r => r.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ExposureSummary>()
+            _ = modelBuilder
+                .Entity<ExposureSummary>()
                 .HasOne(e => e.Organizations)
                 .WithMany(o => o.ExposureSummaries)
                 .HasForeignKey(e => e.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Mitigation>()
+            _ = modelBuilder
+                .Entity<Mitigation>()
                 .HasOne(m => m.Risk)
                 .WithMany(r => r.Mitigations)
                 .HasForeignKey(m => m.RiskId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<RiskReport>()
+            _ = modelBuilder
+                .Entity<RiskReport>()
                 .HasOne(rp => rp.Organizations)
                 .WithMany(o => o.RiskReports)
                 .HasForeignKey(rp => rp.OrgId)
@@ -44,4 +48,3 @@ namespace RiskExposureTracker.Models
         }
     }
 }
-

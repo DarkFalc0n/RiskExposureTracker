@@ -1,6 +1,6 @@
-﻿using RiskExposureTracker.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RiskExposureTracker.Models;
+using RiskExposureTracker.Services;
 
 namespace RiskExposureTracker.Controllers
 {
@@ -15,14 +15,12 @@ namespace RiskExposureTracker.Controllers
             _service = service;
         }
 
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Organization>>> GetAll()
         {
             var orgs = await _service.GetAllOrganizationsServicAsync();
             return Ok(orgs);
         }
-
 
         [HttpGet("{orgId}")]
         public async Task<IActionResult> GetOrganization(long orgId)
@@ -44,7 +42,6 @@ namespace RiskExposureTracker.Controllers
             if (existingOrg == null)
                 return NotFound();
 
-            
             existingOrg.Name = updatedOrg.Name;
             existingOrg.Sector = updatedOrg.Sector;
             existingOrg.Region = updatedOrg.Region;

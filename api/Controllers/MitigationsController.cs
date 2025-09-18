@@ -1,13 +1,6 @@
-using RiskExposureTracker.Models;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.EntityFrameworkCore;
-
-
-
-/*•	POST /api/mitigations — Log mitigation action.
-•	GET /api/mitigations/{riskId} — Fetch actions per risk.
-*/
+using RiskExposureTracker.Models;
+using RiskExposureTracker.Services;
 
 namespace RiskExposureTracker.Controllers
 {
@@ -15,55 +8,35 @@ namespace RiskExposureTracker.Controllers
     [ApiController]
     public class MitigationsController : Controller
     {
+        private readonly IMitigationsService _service; // service layer
 
-        private readonly ApplicationDbContext _context; // db context
-
-        public MitigationsController(ApplicationDbContext context) // DI
+        public MitigationsController(IMitigationsService service) // DI
         {
-            _context = context;
+            _service = service;
         }
-
-        // ---------------------------------------------------------------------------------
-
-
-        // POST: api/mitigations
 
         [HttpPost]
-        
         public async Task<ActionResult<Mitigation>> PostMitigation(Mitigation mitigation)
         {
-            // Check if related Risk exists
-            var riskExists = await _context.Risks.AnyAsync(r => r.RiskId == mitigation.RiskId);
-            if (!riskExists)
+            try
             {
-                return BadRequest($"Risk with ID {mitigation.RiskId} does not exist.");
+                var created = await _service.CreateMitigationAsync(mitigation);
+                return CreatedAtAction(
+                    nameof(GetMitigationsByRisk),
+                    new { riskId = created.RiskId },
+                    created
+                );
             }
-
-            // Default status if not provided
-
-            if (string.IsNullOrEmpty(mitigation.Status))
+            catch (ArgumentException ex)
             {
-                mitigation.Status = "Open";
+                return BadRequest(ex.Message);
             }
-
-            _context.Mitigations.Add(mitigation);
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMitigationsByRisk), new { riskId = mitigation.RiskId }, mitigation);
         }
-
-
-        // ---------------------------------------------------------------------------------
-
-        // GET: api/mitigations/{riskId}
 
         [HttpGet("{riskId}")]
         public async Task<ActionResult<IEnumerable<Mitigation>>> GetMitigationsByRisk(long riskId)
         {
-            var mitigations = await _context.Mitigations
-                                            .Where(m => m.RiskId == riskId)
-                                            .ToListAsync();
+            var mitigations = await _service.GetMitigationsByRiskAsync(riskId);
 
             if (mitigations == null || !mitigations.Any())
             {

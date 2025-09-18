@@ -20,10 +20,6 @@ namespace RiskExposureTracker.Controllers
             _service = service;
         }
 
-
-        // GET: api/reports/{orgId} ----------------------------------------------------------------
-
-        
         [HttpGet("{orgId}")]
         public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrg(long orgId)
         {
@@ -35,13 +31,11 @@ namespace RiskExposureTracker.Controllers
             return Ok(reports);
         }
 
-
-
-        // GET: api/reports/{orgId}/{period} --------------------------------------------------------
-
-        
         [HttpGet("{orgId}/{period}")]
-        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrgAndPeriod(long orgId, string period)
+        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrgAndPeriod(
+            long orgId,
+            string period
+        )
         {
             var reports = await _service.GetReportsByOrgAndPeriodAsync(orgId, period);
             if (!reports.Any())
@@ -51,9 +45,6 @@ namespace RiskExposureTracker.Controllers
             return Ok(reports);
         }
 
-
-        // POST: api/reports --------------------------------------------------------------------------
-        
         [HttpPost]
         public async Task<ActionResult<RiskReport>> PostReport(RiskReport report)
         {
@@ -62,4 +53,3 @@ namespace RiskExposureTracker.Controllers
         }
     }
 }
-
