@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
+namespace RiskExposureTracker.Models
 {
     public class ExposureSummary
     {
@@ -14,13 +14,13 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
 
         [Required]
         [MaxLength(50)]
-        public string Category { get; set; }
+        public required string Category { get; set; }
 
         [Column(TypeName = "decimal(12,2)")]
         public decimal TotalAmt { get; set; }
 
         public DateTime LastUpdate { get; set; }
 
-        public Organizations? Organizations { get; set; }
+        public Organization? Organizations { get; set; }
     }
 }

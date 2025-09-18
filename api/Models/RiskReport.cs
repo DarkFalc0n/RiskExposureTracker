@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
+namespace RiskExposureTracker.Models
 {
-    public class RiskReports
+    public class RiskReport
     {
         [Key]
         public long ReportId { get; set; }
@@ -14,14 +14,14 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
 
         [Required]
         [MaxLength(20)]
-        public string Period { get; set; }  // e.g., Monthly, Quarterly
+        public required string Period { get; set; }  // e.g., Monthly, Quarterly
 
         [Required]
         [MaxLength(500)]
-        public string Metrics { get; set; }  // JSON summary
+        public required string Metrics { get; set; }  // JSON summary
 
         public DateTime CreatedAt { get; set; }
 
-        public Organizations? Organizations { get; set; }
+        public Organization? Organizations { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using capstone1.Data;
-using capstone1.Models;
+using RiskExposureTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 •	GET /api/mitigations/{riskId} — Fetch actions per risk.
 */
 
-namespace capstone1.Controllers
+namespace RiskExposureTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

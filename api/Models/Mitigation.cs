@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace capstone1.Models
+namespace RiskExposureTracker.Models
 {
     public class Mitigation
     {
@@ -19,14 +19,14 @@ namespace capstone1.Models
 
         [Required(ErrorMessage = "Mitigation action is required.")]
         [StringLength(200, ErrorMessage = "Action cannot exceed 200 characters.")]
-        public string Action { get; set; } // Mitigation step description
+        public required string Action { get; set; } // Mitigation step description
 
 
         // --------------------------------------------------------------------------
 
         [Required(ErrorMessage = "Owner is required.")]
         [StringLength(100, ErrorMessage = "Owner name cannot exceed 100 characters.")]
-        public string Owner { get; set; } // owner -> person responsible
+        public required string Owner { get; set; } // owner -> person responsible
 
         // --------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ namespace capstone1.Models
         // --------------------------------------------------------------------------
 
         // Navigation property
-        public virtual Risks Risk { get; set; } // Risks model from project part 1
+        public virtual required Risk Risk { get; set; } // Risks model from project part 1
 
         // Custom deadline validation
         public static ValidationResult ValidateDeadline(DateTime deadline, ValidationContext context)

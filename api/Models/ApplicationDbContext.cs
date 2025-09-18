@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 
-namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
+namespace RiskExposureTracker.Models
 {
     public class ApplicationDbContext:DbContext
     {
@@ -9,19 +8,17 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
             : base(options) { }
 
         // DbSets for each model
-        public DbSet<Organizations> Organizations { get; set; }
-        public DbSet<Risks> Risks { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Risk> Risks { get; set; }
         public DbSet<ExposureSummary> ExposureSummaries { get; set; }
-        public DbSet<Mitigations> Mitigations { get; set; }
-        public DbSet<RiskReports> RiskReports { get; set; }
+        public DbSet<Mitigation> Mitigations { get; set; }
+        public DbSet<RiskReport> RiskReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);           
 
-            
-
-            modelBuilder.Entity<Risks>()
+            modelBuilder.Entity<Risk>()
                 .HasOne(r => r.Organizations)
                 .WithMany(o => o.Risks)
                 .HasForeignKey(r => r.OrgId)
@@ -33,13 +30,13 @@ namespace CapstoneProject_RiskExposureTrackingAndReportingSystem.Models
                 .HasForeignKey(e => e.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Mitigations>()
+            modelBuilder.Entity<Mitigation>()
                 .HasOne(m => m.Risk)
                 .WithMany(r => r.Mitigations)
                 .HasForeignKey(m => m.RiskId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<RiskReports>()
+            modelBuilder.Entity<RiskReport>()
                 .HasOne(rp => rp.Organizations)
                 .WithMany(o => o.RiskReports)
                 .HasForeignKey(rp => rp.OrgId)
