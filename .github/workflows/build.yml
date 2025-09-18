@@ -45,6 +45,6 @@ jobs:
       # Add linting
       
       - name: Build
-        run: dotnet build
+        run: npm run build
 
   
