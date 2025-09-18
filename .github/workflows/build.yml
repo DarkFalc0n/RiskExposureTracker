@@ -59,10 +59,13 @@ jobs:
           cache-dependency-path: client/package.json
 
       - name: Remove lockfile
-        run: rm -f package-lock.json
+        run: rm -f package-lock.json node_modules
 
       - name: Install deps
-        run: npm install
+        run: npm install --force
+
+      - name: Rebuild native modules
+        run: npm rebuild --force
       
       # TODO: Add linting
       # - name: Lint
