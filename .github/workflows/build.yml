@@ -12,17 +12,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  api:
-    name: Build .NET API
+
+  build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: api
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup Nodejs 22
+        uses: actions/setup-node@v4
+
+      - name: Setup .NET 9
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
@@ -36,33 +37,14 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore
-        run: dotnet restore
+        run: cd api && dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-  client:
-    name: Build Client
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: client
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup Nodejs 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Install deps
+      - name: Install node deps
         run: npm ci
-      
-      # TODO: Add linting
-      # - name: Lint
-      #   run: bun run lint --silent
 
+      # Add linting
+      
       - name: Build
-        run: npm run build
+        run: dotnet build
+
+  
