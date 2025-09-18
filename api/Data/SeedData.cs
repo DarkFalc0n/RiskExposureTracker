@@ -1,4 +1,4 @@
-namespace RiskExposureTracker.Data {
-    public static class SeedData {
-    }
+namespace RiskExposureTracker.Data
+{
+    public static class SeedData { }
 }

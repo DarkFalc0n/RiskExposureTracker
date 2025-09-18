@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using RiskExposureTracker.Data;
 using RiskExposureTracker.Models;
 
-
 namespace RiskExposureTracker.Repositories
 {
     public class RiskReportsRepository : IRiskReportsRepository
@@ -16,20 +15,23 @@ namespace RiskExposureTracker.Repositories
 
         public async Task<IEnumerable<RiskReport>> GetReportsByOrgAsync(long orgId)
         {
-            return await _context.RiskReports
-                                 .Where(r => r.OrgId == orgId)
-                                 .OrderByDescending(r => r.CreatedAt)
-                                 .ToListAsync();
+            return await _context
+                .RiskReports.Where(r => r.OrgId == orgId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
         }
 
         // ---------------------------------------------------------------------------------------------------------------
 
-        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(long orgId, string period)
+        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(
+            long orgId,
+            string period
+        )
         {
-            return await _context.RiskReports
-                                 .Where(r => r.OrgId == orgId && r.Period == period)
-                                 .OrderByDescending(r => r.CreatedAt)
-                                 .ToListAsync();
+            return await _context
+                .RiskReports.Where(r => r.OrgId == orgId && r.Period == period)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
         }
 
         public async Task<RiskReport> AddReportAsync(RiskReport report)

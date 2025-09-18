@@ -3,7 +3,7 @@ using RiskExposureTracker.Repositories;
 
 namespace RiskExposureTracker.Services
 {
-    public class OrganizationService:IOrganizationService
+    public class OrganizationService : IOrganizationService
     {
         private readonly IOrganizationRepository _repository;
 
@@ -12,11 +12,11 @@ namespace RiskExposureTracker.Services
             _repository = repository;
         }
 
-
         public async Task<IEnumerable<Organization>> GetAllOrganizationsServicAsync()
         {
             return await _repository.GetAllOrganizationsAsync();
         }
+
         public async Task<Organization> GetOrganizationAsync(long orgId)
         {
             return await _repository.GetByIdAsync(orgId);
@@ -26,6 +26,5 @@ namespace RiskExposureTracker.Services
         {
             await _repository.UpdateAsync(updatedOrg);
         }
-
     }
 }

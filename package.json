@@ -5,7 +5,8 @@
   "scripts": {
     "start": "concurrently \"npm run start --workspace=api\" \"npm run start --workspace=client\"",
     "build": "concurrently \"npm run build --workspace=api\" \"npm run build --workspace=client\"",
-    "dev": "concurrently \"npm run dev --workspace=api\" \"npm run dev --workspace=client\""
+    "dev": "concurrently \"npm run dev --workspace=api\" \"npm run dev --workspace=client\"",
+    "format": "concurrently \"npm run format --workspace=api\" \"npm run format --workspace=client\""
   },
   "workspaces": [
     "api",
