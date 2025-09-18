@@ -51,20 +51,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Nodejs 22
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
-
-      - name: Clean install state
-        run: rm -rf node_modules package-lock.json bun.lockb
+          node-version: 22
+          cache: 'npm'
 
       - name: Install deps
-        run: bun install
+        run: npm ci
       
       # TODO: Add linting
       # - name: Lint
       #   run: bun run lint --silent
 
       - name: Build
-        run: bun run build
+        run: npm run build
