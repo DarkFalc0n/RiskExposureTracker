@@ -14,7 +14,7 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [MaxLength(50)]
-        public required string Category { get; set; }  
+        public required string Category { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -25,7 +25,7 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [MaxLength(20)]
-        public required string Status { get; set; }  
+        public required string Status { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

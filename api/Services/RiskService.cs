@@ -1,12 +1,13 @@
-﻿using RiskExposureTracker.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RiskExposureTracker.Models;
 using RiskExposureTracker.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace RiskExposureTracker.Services
 {
     public class RiskService : IRiskService
     {
         private readonly IRiskRepository _repository;
+
         public RiskService(IRiskRepository repository) => _repository = repository;
 
         public async Task<Risk> AddRiskAsync(Risk risk)
@@ -22,7 +23,8 @@ namespace RiskExposureTracker.Services
         public async Task<Risk?> UpdateRiskAsync(long id, Risk updatedRisk)
         {
             var existingRisk = await _repository.GetRiskByIdAsync(id);
-            if (existingRisk == null) return null;
+            if (existingRisk == null)
+                return null;
 
             existingRisk.Category = updatedRisk.Category;
             existingRisk.Description = updatedRisk.Description;

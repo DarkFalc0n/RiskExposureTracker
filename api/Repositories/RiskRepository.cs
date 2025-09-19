@@ -3,9 +3,10 @@ using RiskExposureTracker.Models;
 
 namespace RiskExposureTracker.Repositories
 {
-    public class RiskRepository :  IRiskRepository
+    public class RiskRepository : IRiskRepository
     {
         private readonly ApplicationDbContext _context;
+
         public RiskRepository(ApplicationDbContext context) => _context = context;
 
         public async Task<Risk> AddRiskAsync(Risk risk)
@@ -17,15 +18,14 @@ namespace RiskExposureTracker.Repositories
 
         public async Task<List<Risk>> GetRisksByOrgAsync(long orgId)
         {
-            return await _context.Risks
-                                 .Where(r => r.OrgId == orgId)
-                                 .ToListAsync();
+            return await _context.Risks.Where(r => r.OrgId == orgId).ToListAsync();
         }
 
         public async Task<Risk?> GetRiskByIdAsync(long id)
         {
             return await _context.Risks.FindAsync(id);
         }
+
         public async Task<Risk?> UpdateRiskAsync(Risk risk)
         {
             _context.Risks.Update(risk);

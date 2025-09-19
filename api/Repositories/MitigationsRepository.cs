@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RiskExposureTracker.Data;
 using RiskExposureTracker.Models;
 
 namespace RiskExposureTracker.Repositories
@@ -30,9 +29,7 @@ namespace RiskExposureTracker.Repositories
         // Fetch mitigations by riskId
         public async Task<IEnumerable<Mitigation>> GetMitigationsByRiskAsync(long riskId)
         {
-            return await _context.Mitigations
-                                 .Where(m => m.RiskId == riskId)
-                                 .ToListAsync();
+            return await _context.Mitigations.Where(m => m.RiskId == riskId).ToListAsync();
         }
     }
 }

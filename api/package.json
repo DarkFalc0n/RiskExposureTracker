@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "dotnet run watch",
     "build": "dotnet build",
-    "start": "dotnet run"
+    "start": "dotnet run",
+    "format": "csharpier format ."
   },
   "author": "",
   "license": "ISC",

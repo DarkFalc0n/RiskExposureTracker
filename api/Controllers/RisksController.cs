@@ -12,6 +12,7 @@ namespace RiskExposureTracker.Controllers
     public class RisksController : ControllerBase
     {
         private readonly IRiskService _service;
+
         public RisksController(IRiskService service) => _service = service;
 
         // POST /api/risks
@@ -19,7 +20,11 @@ namespace RiskExposureTracker.Controllers
         public async Task<IActionResult> AddRisk(Risk risk)
         {
             var createdRisk = await _service.AddRiskAsync(risk);
-            return CreatedAtAction(nameof(GetRisksByOrg), new { orgId = createdRisk.OrgId }, createdRisk);
+            return CreatedAtAction(
+                nameof(GetRisksByOrg),
+                new { orgId = createdRisk.OrgId },
+                createdRisk
+            );
         }
 
         // GET /api/risks/{orgId}
@@ -35,7 +40,8 @@ namespace RiskExposureTracker.Controllers
         public async Task<IActionResult> UpdateRisk(long id, Risk updatedRisk)
         {
             var risk = await _service.UpdateRiskAsync(id, updatedRisk);
-            if (risk == null) return NotFound(new { message = $"Risk with ID {id} not found." });
+            if (risk == null)
+                return NotFound(new { message = $"Risk with ID {id} not found." });
             return Ok(risk);
         }
     }
