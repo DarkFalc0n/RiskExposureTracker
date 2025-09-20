@@ -1,0 +1,140 @@
+
+.organization-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 100px;  
+  }
+  
+  /* Fixed Header */
+  .organization-details h1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #9932CC;;  
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 15px 0;
+    text-align: center;
+    z-index: 1000; 
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  }
+  
+  /* Card container for Organization Details */
+  .organization-details .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 120px; 
+  }
+  
+  /* Card Body */
+  .organization-details .card-body {
+    padding: 20px;
+  }
+  
+  /* Card Title */
+  .organization-details .card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4e4e4e;
+  }
+  
+  /* Card Text */
+  .organization-details .card-text {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 8px 0;
+  }
+  
+  /* Button container */
+  .organization-details .button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  /* Button Styling */
+  .organization-details button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px; 
+    cursor: pointer;
+    font-weight: bold;
+    width: 48%;
+  }
+  
+  /* Edit Button */
+  .organization-details .btn-primary {
+    background-color: #9932CC; /* Violet for Edit */
+    color: white;
+  }
+  
+  .organization-details .btn-primary:hover {
+    background-color: #7A1F8F;
+    transform: scale(1.05);
+  }
+  
+  .organization-details .btn-primary:active {
+    background-color: #5F107B;
+    transform: scale(0.98);
+  }
+  
+  
+  .organization-details .btn-back {
+    background-color: #007bff; 
+    color: white;
+  }
+  
+  .organization-details .btn-back:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05);
+  }
+  
+  .organization-details .btn-back:active {
+    background-color: #004085; 
+    transform: scale(0.98);
+  }
+  
+  
+  @media (max-width: 768px) {
+    .organization-details .card {
+      padding: 20px;
+      width: 90%; 
+    }
+  
+    .organization-details h1 {
+      font-size: 2rem;
+    }
+  
+    .organization-details button {
+      padding: 10px 18px;
+      font-size: 1rem;
+    }
+  
+    .organization-details .button-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .organization-details button {
+      width: 100%; 
+      margin-bottom: 10px;
+    }
+  }
+  
