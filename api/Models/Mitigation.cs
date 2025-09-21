@@ -47,7 +47,9 @@ namespace RiskExposureTracker.Models
         // --------------------------------------------------------------------------
 
         // Navigation property
-        public virtual required Risk Risk { get; set; } // Risks model from project part 1
+       //  public virtual required Risk Risk { get; set; } // Risks model from project part 1
+        public virtual Risk? Risk { get; set; }  // *******changed , needs a look
+
 
         // Custom deadline validation
         public static ValidationResult ValidateDeadline(DateTime deadline, ValidationContext context)
