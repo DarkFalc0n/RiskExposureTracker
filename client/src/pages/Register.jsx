@@ -15,13 +15,22 @@ import { registerSchema } from '@/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 import RiskLensLogo from '@/assets/Risklens_Logo.png';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const Register = () => {
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      name: '',
+      sector: '',
+      region: '',
+      contact: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -52,11 +61,11 @@ const Register = () => {
           >
             <FormField
               control={form.control}
-              name="firstName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-muted-foreground text-xs">
-                    First name
+                    Organization name
                   </FormLabel>
                   <div className="relative">
                     <FormControl>
@@ -73,11 +82,63 @@ const Register = () => {
             />
             <FormField
               control={form.control}
-              name="lastName"
+              name="sector"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-muted-foreground text-xs">
-                    Last name
+                    Sector
+                  </FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input className="pl-9 w-84" {...field} />
+                    </FormControl>
+                    <User
+                      aria-hidden
+                      className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="region"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground text-xs">
+                    Region
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-84">
+                        <SelectValue placeholder="Select region" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="NorthAmerica">North America</SelectItem>
+                      <SelectItem value="SouthAmerica">South America</SelectItem>
+                      <SelectItem value="Europe">Europe</SelectItem>
+                      <SelectItem value="MiddleEast">Middle East</SelectItem>
+                      <SelectItem value="Africa">Africa</SelectItem>
+                      <SelectItem value="AsiaPacific">Asia Pacific</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contact"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground text-xs">
+                    Primary contact
                   </FormLabel>
                   <div className="relative">
                     <FormControl>
@@ -155,7 +216,7 @@ const Register = () => {
                 </FormItem>
               )}
             />
-            <p className="text-left w-full text-muted-foreground text-sm">
+            <p className="text-left w-full text-muted-foreground text-sm mt-4">
               Already have an account?{' '}
               <Link to="/auth/login" className="text-primary">
                 Login

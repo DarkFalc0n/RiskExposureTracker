@@ -89,7 +89,7 @@ const Login = () => {
                 </FormItem>
               )}
             />
-            <p className="text-left w-full text-muted-foreground text-sm">
+            <p className="text-left w-full text-muted-foreground text-sm mt-4">
               New to RiskLens?{' '}
               <Link to="/auth/register" className="text-primary">
                 Register

@@ -1,53 +1,126 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Text;
+using dotenv.net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using RiskExposureTracker.Models;
+using RiskExposureTracker.Repositories;
+using RiskExposureTracker.Services;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace RiskExposureTracker
 {
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing",
-    "Bracing",
-    "Chilly",
-    "Cool",
-    "Mild",
-    "Warm",
-    "Balmy",
-    "Hot",
-    "Sweltering",
-    "Scorching",
-};
-
-app.MapGet(
-        "/weatherforecast",
-        () =>
+    public class Program
+    {
+        public static void Main(string[] args)
         {
-            var forecast = Enumerable
-                .Range(1, 5)
-                .Select(index => new WeatherForecast(
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-            return forecast;
+            var builder = WebApplication.CreateBuilder(args);
+            builder
+                .Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new System.Text.Json.Serialization.JsonStringEnumConverter()
+                    );
+                });
+
+            // Load variables from .env (probe parent directories for repo-root .env)
+            DotEnv.Fluent().WithProbeForEnv().Load();
+
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+            var connStr =
+                $"Server={dbHost};Database={dbName};User ID={dbUser};Password={dbPassword};Encrypt=True;TrustServerCertificate=True;";
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connStr)
+            );
+
+            builder
+                .Services.AddIdentity<OrgModel, IdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 8;
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedAccount = false;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Dependency injection
+            builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+
+            // Add CORS policy here
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowReactApp",
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("http://localhost:5173") // React app URL
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .DisallowCredentials();
+                    }
+                );
+            });
+
+            // Bind JWT options from environment
+            var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "ret-api";
+            var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "ret-client";
+            var jwtSigningKey =
+                Environment.GetEnvironmentVariable("JWT_SIGNING_KEY")
+                ?? throw new Exception("JWT_SIGNING_KEY is not set");
+
+            builder.Services.Configure<JwtOptions>(opts =>
+            {
+                opts.Issuer = jwtIssuer;
+                opts.Audience = jwtAudience;
+                opts.SigningKey = jwtSigningKey;
+                opts.AccessTokenMinutes = 60;
+            });
+
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+            // Configure JWT Bearer authentication
+            var key = Encoding.UTF8.GetBytes(jwtSigningKey);
+            builder
+                .Services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtIssuer,
+                        ValidateAudience = true,
+                        ValidAudience = jwtAudience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(1),
+                    };
+                });
+
+            var app = builder.Build();
+
+            app.UseCors("AllowReactApp");
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+            app.Run();
         }
-    )
-    .WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
 }
