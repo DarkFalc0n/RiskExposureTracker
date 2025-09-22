@@ -9,7 +9,7 @@ namespace RiskExposureTracker.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        public DbSet<Organization> Organizations { get; set; }
+        // public DbSet<Organization> Organizations { get; set; }
         public DbSet<Risk> Risks { get; set; }
         public DbSet<ExposureSummary> ExposureSummaries { get; set; }
         public DbSet<Mitigation> Mitigations { get; set; }
@@ -19,7 +19,6 @@ namespace RiskExposureTracker.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // Store Region enum as string in the database
             var regionConverter = new EnumToStringConverter<Region>();
             modelBuilder
                 .Entity<Organization>()
@@ -32,12 +31,31 @@ namespace RiskExposureTracker.Models
                 .HasConversion(regionConverter)
                 .HasMaxLength(50);
 
+            var riskStatusConverter = new EnumToStringConverter<RiskStatus>();
+            modelBuilder
+                .Entity<Risk>()
+                .Property(r => r.Status)
+                .HasConversion(riskStatusConverter)
+                .HasMaxLength(20);
+
+            var riskCategoryConverter = new EnumToStringConverter<RiskCategory>();
+            modelBuilder
+                .Entity<Risk>()
+                .Property(r => r.Category)
+                .HasConversion(riskCategoryConverter)
+                .HasMaxLength(50);
+
             _ = modelBuilder
                 .Entity<Risk>()
                 .HasOne(r => r.Organizations)
                 .WithMany(o => o.Risks)
                 .HasForeignKey(r => r.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            _ = modelBuilder
+                .Entity<Risk>()
+                .Property(r => r.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
 
             _ = modelBuilder
                 .Entity<ExposureSummary>()

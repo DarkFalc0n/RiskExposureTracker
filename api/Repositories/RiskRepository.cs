@@ -11,12 +11,21 @@ namespace RiskExposureTracker.Repositories
 
         public async Task<Risk> AddRiskAsync(Risk risk)
         {
+            if (risk.CreatedAt == default)
+            {
+                risk.CreatedAt = DateTime.UtcNow;
+            }
             _context.Risks.Add(risk);
             await _context.SaveChangesAsync();
             return risk;
         }
 
-        public async Task<List<Risk>> GetRisksByOrgAsync(long orgId)
+        public async Task<List<Risk>> GetAllRisksAsync()
+        {
+            return await _context.Risks.ToListAsync();
+        }
+
+        public async Task<List<Risk>> GetRisksByOrgAsync(string orgId)
         {
             return await _context.Risks.Where(r => r.OrgId == orgId).ToListAsync();
         }

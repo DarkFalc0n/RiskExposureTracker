@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RiskExposureTracker.Data;
 using RiskExposureTracker.Models;
 using RiskExposureTracker.Services;
 
@@ -9,13 +7,21 @@ namespace RiskExposureTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RisksController : ControllerBase
     {
         private readonly IRiskService _service;
 
         public RisksController(IRiskService service) => _service = service;
 
-        // POST /api/risks
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
+        {
+            var risks = await _service.GetAllRisksAsync();
+            return Ok(risks);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddRisk(Risk risk)
         {
@@ -27,15 +33,13 @@ namespace RiskExposureTracker.Controllers
             );
         }
 
-        // GET /api/risks/{orgId}
         [HttpGet("{orgId}")]
-        public async Task<IActionResult> GetRisksByOrg(long orgId)
+        public async Task<IActionResult> GetRisksByOrg(string orgId)
         {
             var risks = await _service.GetRisksByOrgAsync(orgId);
             return Ok(risks);
         }
 
-        // PUT /api/risks/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRisk(long id, Risk updatedRisk)
         {

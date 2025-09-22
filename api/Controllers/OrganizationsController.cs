@@ -1,54 +1,90 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using RiskExposureTracker.Models;
 using RiskExposureTracker.Services;
 
 namespace RiskExposureTracker.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/orgs")]
     [ApiController]
+    [Authorize]
     public class OrganizationsController : ControllerBase
     {
         private readonly IOrganizationService _service;
+        private readonly UserManager<OrgModel> _userManager;
 
-        public OrganizationsController(IOrganizationService service)
+        public OrganizationsController(
+            IOrganizationService service,
+            UserManager<OrgModel> userManager
+        )
         {
             _service = service;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetAll()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<OrgModel>>> GetAll()
         {
-            var orgs = await _service.GetAllOrganizationsServicAsync();
-            return Ok(orgs);
+            var users = _userManager.Users.ToList();
+            return Ok(users);
         }
 
         [HttpGet("{orgId}")]
-        public async Task<IActionResult> GetOrganization(long orgId)
+        public async Task<IActionResult> GetOrganization(string orgId)
         {
-            var org = await _service.GetOrganizationAsync(orgId);
-            if (org == null)
+            if (!User.IsInRole("Admin"))
+            {
+                var userId = _userManager.GetUserId(User);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return NotFound();
+                }
+                else if (userId != orgId)
+                {
+                    return Forbid();
+                }
+            }
+
+            var orgUser = await _userManager.FindByIdAsync(orgId);
+            if (orgUser == null)
                 return NotFound();
 
-            return Ok(org);
+            return Ok(orgUser);
         }
 
         [HttpPut("{orgId}")]
-        public async Task<IActionResult> UpdateOrganization(long orgId, Organization updatedOrg)
+        public async Task<IActionResult> UpdateOrganization(string orgId, OrgModel updatedOrg)
         {
-            if (orgId != updatedOrg.OrgId)
-                return BadRequest("Invalid Organization Id");
+            if (!User.IsInRole("Admin"))
+            {
+                var userId = _userManager.GetUserId(User);
+                if (string.IsNullOrEmpty(userId) || userId != orgId)
+                    return Forbid();
+            }
 
-            var existingOrg = await _service.GetOrganizationAsync(orgId);
-            if (existingOrg == null)
+            var existing = await _userManager.FindByIdAsync(orgId);
+            if (existing == null)
                 return NotFound();
 
-            existingOrg.Name = updatedOrg.Name;
-            existingOrg.Sector = updatedOrg.Sector;
-            existingOrg.Region = updatedOrg.Region;
-            existingOrg.Contact = updatedOrg.Contact;
-            existingOrg.Email = updatedOrg.Email;
+            existing.Name = updatedOrg.Name;
+            existing.Sector = updatedOrg.Sector;
+            existing.Region = updatedOrg.Region;
+            existing.Contact = updatedOrg.Contact;
+            existing.Email = updatedOrg.Email;
 
-            await _service.UpdateOrganizationAsync(existingOrg);
+            var result = await _userManager.UpdateAsync(existing);
+            if (!result.Succeeded)
+            {
+                return ValidationProblem(
+                    new ValidationProblemDetails(
+                        result
+                            .Errors.GroupBy(e => e.Code)
+                            .ToDictionary(g => g.Key, g => g.Select(e => e.Description).ToArray())
+                    )
+                );
+            }
 
             return Ok(new { Status = "Requested organization details are updated." });
         }

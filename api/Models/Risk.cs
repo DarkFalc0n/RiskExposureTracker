@@ -10,11 +10,11 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [ForeignKey("Organization")]
-        public long OrgId { get; set; }
+        public string OrgId { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(50)]
-        public required string Category { get; set; }
+        public required RiskCategory Category { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -25,11 +25,11 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [MaxLength(20)]
-        public required string Status { get; set; }
+        public required RiskStatus Status { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
-        public Organization? Organizations { get; set; }
+        public OrgModel? Organizations { get; set; }
 
         public ICollection<Mitigation>? Mitigations { get; set; }
     }

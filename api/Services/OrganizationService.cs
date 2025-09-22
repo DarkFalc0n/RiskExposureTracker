@@ -1,4 +1,5 @@
-﻿using RiskExposureTracker.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using RiskExposureTracker.Models;
 using RiskExposureTracker.Repositories;
 
 namespace RiskExposureTracker.Services
@@ -12,19 +13,19 @@ namespace RiskExposureTracker.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Organization>> GetAllOrganizationsServicAsync()
+        public async Task<IEnumerable<OrgModel>> GetAllOrganizationsServicAsync()
         {
             return await _repository.GetAllOrganizationsAsync();
         }
 
-        public async Task<Organization> GetOrganizationAsync(long orgId)
+        public async Task<OrgModel?> GetOrganizationAsync(string orgId)
         {
             return await _repository.GetByIdAsync(orgId);
         }
 
-        public async Task UpdateOrganizationAsync(Organization updatedOrg)
+        public async Task<IdentityResult> UpdateOrganizationAsync(OrgModel updatedOrg)
         {
-            await _repository.UpdateAsync(updatedOrg);
+            return await _repository.UpdateAsync(updatedOrg);
         }
     }
 }
