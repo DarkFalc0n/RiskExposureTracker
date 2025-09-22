@@ -8,12 +8,10 @@ namespace RiskExposureTracker.Models
         [Key]
         public long RiskId { get; set; }
 
-        [Required]
-        [ForeignKey("Organization")]
+        [ForeignKey(nameof(Organizations))]
         public string OrgId { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(50)]
         public required RiskCategory Category { get; set; }
 
         [Required]
@@ -24,7 +22,6 @@ namespace RiskExposureTracker.Models
         public decimal Exposure { get; set; }
 
         [Required]
-        [MaxLength(20)]
         public required RiskStatus Status { get; set; }
 
         public DateTime CreatedAt { get; set; }

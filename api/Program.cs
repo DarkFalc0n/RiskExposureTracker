@@ -35,7 +35,7 @@ namespace RiskExposureTracker
             var connStr =
                 $"Server={dbHost};Database={dbName};User ID={dbUser};Password={dbPassword};Encrypt=True;TrustServerCertificate=True;Connection Timeout=60";
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connStr)
+                options.UseSqlServer(connStr, sqlOptions => sqlOptions.EnableRetryOnFailure())
             );
 
             builder
@@ -51,6 +51,8 @@ namespace RiskExposureTracker
             // Dependency injection
             builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+            builder.Services.AddScoped<IRiskRepository, RiskRepository>();
+            builder.Services.AddScoped<IRiskService, RiskService>();
 
             // Add CORS policy here
             builder.Services.AddCors(options =>

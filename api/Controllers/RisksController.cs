@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RiskExposureTracker.Models;
 using RiskExposureTracker.Services;
@@ -25,6 +26,12 @@ namespace RiskExposureTracker.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRisk(Risk risk)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Forbid();
+            }
+            risk.OrgId = userId;
             var createdRisk = await _service.AddRiskAsync(risk);
             return CreatedAtAction(
                 nameof(GetRisksByOrg),

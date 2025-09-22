@@ -21,11 +21,6 @@ namespace RiskExposureTracker.Models
 
             var regionConverter = new EnumToStringConverter<Region>();
             modelBuilder
-                .Entity<Organization>()
-                .Property(o => o.Region)
-                .HasConversion(regionConverter)
-                .HasMaxLength(50);
-            modelBuilder
                 .Entity<OrgModel>()
                 .Property(u => u.Region)
                 .HasConversion(regionConverter)
