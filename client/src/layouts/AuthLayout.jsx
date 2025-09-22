@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 import { AuroraBackground } from '@/components/ui/shadcn-io/aurora-background';
-import RiskLensLogo from '@/assets/RiskLens_Logo_Dark.png';
+import RiskLensLogo from '@/assets/Risklens_Logo_Dark.png';
 
 const AuthLayout = () => {
   return (
