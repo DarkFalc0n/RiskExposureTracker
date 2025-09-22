@@ -4,6 +4,8 @@ import Home from '@/pages/Home';
 import AuthLayout from '@/layouts/AuthLayout';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import { UserProvider } from '@/context/UserContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +24,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <UserProvider>
+          <AppLayout />
+        </UserProvider>
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '/',
