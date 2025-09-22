@@ -53,6 +53,8 @@ namespace RiskExposureTracker
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IRiskRepository, RiskRepository>();
             builder.Services.AddScoped<IRiskService, RiskService>();
+            builder.Services.AddScoped<IMitigationsRepository, MitigationsRepository>();
+            builder.Services.AddScoped<IMitigationsService, MitigationsService>();
 
             // Add CORS policy here
             builder.Services.AddCors(options =>

@@ -31,5 +31,17 @@ namespace RiskExposureTracker.Repositories
         {
             return await _context.Mitigations.Where(m => m.RiskId == riskId).ToListAsync();
         }
+
+        public async Task<Mitigation?> GetByIdAsync(long id)
+        {
+            return await _context.Mitigations.FindAsync(id);
+        }
+
+        public async Task<Mitigation?> UpdateMitigationAsync(Mitigation mitigation)
+        {
+            _context.Mitigations.Update(mitigation);
+            await _context.SaveChangesAsync();
+            return mitigation;
+        }
     }
 }
