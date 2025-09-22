@@ -17,7 +17,10 @@ namespace RiskExposureTracker.Services
             return await _repository.GetReportsByOrgAsync(orgId);
         }
 
-        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(long orgId, string period)
+        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(
+            long orgId,
+            string period
+        )
         {
             return await _repository.GetReportsByOrgAndPeriodAsync(orgId, period);
         }

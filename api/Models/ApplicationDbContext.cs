@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace RiskExposureTracker.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<OrgModel>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        // DbSets for each model
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Risk> Risks { get; set; }
         public DbSet<ExposureSummary> ExposureSummaries { get; set; }
@@ -17,6 +18,19 @@ namespace RiskExposureTracker.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Store Region enum as string in the database
+            var regionConverter = new EnumToStringConverter<Region>();
+            modelBuilder
+                .Entity<Organization>()
+                .Property(o => o.Region)
+                .HasConversion(regionConverter)
+                .HasMaxLength(50);
+            modelBuilder
+                .Entity<OrgModel>()
+                .Property(u => u.Region)
+                .HasConversion(regionConverter)
+                .HasMaxLength(50);
 
             _ = modelBuilder
                 .Entity<Risk>()

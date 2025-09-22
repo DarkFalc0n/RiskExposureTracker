@@ -15,7 +15,7 @@ namespace RiskExposureTracker.Models
         public required string Sector { get; set; }
 
         [MaxLength(50)]
-        public required string Region { get; set; }
+        public required Region Region { get; set; }
 
         [MaxLength(100)]
         public required string Contact { get; set; }

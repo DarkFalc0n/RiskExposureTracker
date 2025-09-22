@@ -3,7 +3,7 @@ using RiskExposureTracker.Models;
 
 namespace RiskExposureTracker.Repositories
 {
-    public class OrganizationRepository:IOrganizationRepository
+    public class OrganizationRepository : IOrganizationRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -11,11 +11,11 @@ namespace RiskExposureTracker.Repositories
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Organization>> GetAllOrganizationsAsync()
         {
             var orgs = await _context.Organizations.ToListAsync();
             return orgs;
-
         }
 
         public async Task<Organization> GetByIdAsync(long orgId)
@@ -28,7 +28,5 @@ namespace RiskExposureTracker.Repositories
             _context.Organizations.Update(organization);
             await _context.SaveChangesAsync();
         }
-
-
     }
 }

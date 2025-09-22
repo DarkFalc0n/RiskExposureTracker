@@ -14,11 +14,11 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [MaxLength(20)]
-        public required string Period { get; set; }  // e.g., Monthly, Quarterly
+        public required string Period { get; set; } // e.g., Monthly, Quarterly
 
         [Required]
         [MaxLength(500)]
-        public required string Metrics { get; set; }  // JSON summary
+        public required string Metrics { get; set; } // JSON summary
 
         public DateTime CreatedAt { get; set; }
 
