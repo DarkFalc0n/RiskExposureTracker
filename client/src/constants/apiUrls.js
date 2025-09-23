@@ -9,6 +9,7 @@ export const API_URLS = {
     UPDATE_MITIGATION: `/mitigations/{id}`,
     GET_ALL_MITIGATIONS: `/mitigations`,
     GET_MITIGATIONS_BY_RISK: `/mitigations/{riskId}`,
+    GET_MITIGATIONS_BY_ORG: `/mitigations/org/{orgId}`,
     GET_ALL_ORGANIZATIONS: `/orgs`,
     GET_ALL_RISKS: `/risks`,
 };

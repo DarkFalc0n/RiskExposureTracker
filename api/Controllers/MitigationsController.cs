@@ -68,6 +68,25 @@ namespace RiskExposureTracker.Controllers
             return Ok(mitigations);
         }
 
+        [HttpGet("org/{orgId}")]
+        public async Task<ActionResult<IEnumerable<Mitigation>>> GetMitigationsByOrgId(string orgId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Forbid();
+            }
+
+            // Only allow access to own orgId unless Admin
+            if (!User.IsInRole("Admin") && !string.Equals(orgId, userId, StringComparison.Ordinal))
+            {
+                return Forbid();
+            }
+
+            var mitigations = await _service.GetMitigationsByOrgIdAsync(orgId);
+            return Ok(mitigations);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMitigation(long id, Mitigation updated)
         {

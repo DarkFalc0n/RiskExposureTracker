@@ -7,6 +7,9 @@ import RisksForm from '@/components/RisksForm'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { createRisk, updateRisk, getRisksByOrg } from '@/services/risk.service'
 import UserContext from '@/context/UserContext'
+import MitigationsForm from '@/components/MitigationsForm'
+import { createMitigation } from '@/services/mitigation.service'
+import { toast } from 'sonner'
 
 const Risks = () => {
     const { user } = useContext(UserContext) || {}
@@ -37,6 +40,8 @@ const Risks = () => {
     const [addOpen, setAddOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [editing, setEditing] = useState(null)
+    const [mitigationOpen, setMitigationOpen] = useState(false)
+    const [forRisk, setForRisk] = useState(null)
     return (
         <div>
             <div className='flex flex-row justify-between items-center'>
@@ -92,6 +97,10 @@ const Risks = () => {
                         setEditing(row)
                         setEditOpen(true)
                     }}
+                    handleAddMitigation={(row) => {
+                        setForRisk(row)
+                        setMitigationOpen(true)
+                    }}
                 />
             </div>
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
@@ -110,6 +119,28 @@ const Risks = () => {
                                 await reloadRisks()
                             } catch (e) {
                                 console.error('Failed to update risk', e)
+                            }
+                        }}
+                    />
+                </DialogContent>
+            </Dialog>
+            <Dialog open={mitigationOpen} onOpenChange={setMitigationOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Add Mitigation</DialogTitle>
+                    </DialogHeader>
+                    <MitigationsForm
+                        defaultValues={{ action: '', owner: '', deadline: undefined, status: 'Open' }}
+                        onSubmit={async (values) => {
+                            try {
+                                // riskId comes from the selected row
+                                const payload = { ...values, riskId: forRisk?.riskId }
+                                await createMitigation(payload)
+                                setMitigationOpen(false)
+                                setForRisk(null)
+                                toast.success('Mitigation added successfully')
+                            } catch (e) {
+                                console.error('Failed to add mitigation', e)
                             }
                         }}
                     />

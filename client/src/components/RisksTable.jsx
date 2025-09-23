@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { ArrowUpDownIcon, ArrowUpIcon, ArrowDownIcon, PencilIcon } from 'lucide-react'
+import { ArrowUpDownIcon, ArrowUpIcon, ArrowDownIcon, PencilIcon, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 function formatCurrency(value) {
@@ -21,7 +21,7 @@ function StatusBadge({ status }) {
     )
 }
 
-export default function RisksTable({ data = [], showOrgId = false, exposureSort = 'none', onExposureSortChange, handleEdit = () => { } }) {
+export default function RisksTable({ data = [], showOrgId = false, exposureSort = 'none', onExposureSortChange, handleEdit = () => { }, handleAddMitigation = () => { } }) {
     const isControlled = typeof onExposureSortChange === 'function'
     const [internalSort, setInternalSort] = useState(exposureSort)
     const sortOrder = isControlled ? exposureSort : internalSort
@@ -85,16 +85,28 @@ export default function RisksTable({ data = [], showOrgId = false, exposureSort 
                             <td className="px-4 py-3 align-top text-zinc-800 dark:text-zinc-100">{formatCurrency(row.exposure)}</td>
                             <td className="px-4 py-3 align-top"><StatusBadge status={row.status} /></td>
                             <td className="px-4 py-3 align-top">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8"
-                                    aria-label={`Edit risk ${row.riskId}`}
-                                    onClick={() => handleEdit(row)}
-                                    title="Edit risk"
-                                >
-                                    <PencilIcon className="size-4" />
-                                </Button>
+                                <div className="flex items-center gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8"
+                                        aria-label={`Edit risk ${row.riskId}`}
+                                        onClick={() => handleEdit(row)}
+                                        title="Edit risk"
+                                    >
+                                        <PencilIcon className="size-4" />
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8"
+                                        aria-label={`Add mitigation for risk ${row.riskId}`}
+                                        onClick={() => handleAddMitigation(row)}
+                                        title="Add mitigation"
+                                    >
+                                        <ShieldCheck className="size-4" />
+                                    </Button>
+                                </div>
                             </td>
                         </tr>
                     ))}

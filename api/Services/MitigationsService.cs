@@ -33,6 +33,11 @@ namespace RiskExposureTracker.Services
             return await _repository.GetMitigationsByRiskAsync(riskId);
         }
 
+        public async Task<IEnumerable<Mitigation>> GetMitigationsByOrgIdAsync(string orgId)
+        {
+            return await _repository.GetMitigationsByOrgIdAsync(orgId);
+        }
+
         public async Task<Mitigation?> UpdateMitigationAsync(long id, Mitigation updated)
         {
             var existing = await _repository.GetByIdAsync(id);

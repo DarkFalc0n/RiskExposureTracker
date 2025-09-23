@@ -32,6 +32,16 @@ namespace RiskExposureTracker.Repositories
             return await _context.Mitigations.Where(m => m.RiskId == riskId).ToListAsync();
         }
 
+        // Fetch mitigations across all risks for an orgId
+        public async Task<IEnumerable<Mitigation>> GetMitigationsByOrgIdAsync(string orgId)
+        {
+            return await _context
+                .Mitigations.Where(m =>
+                    _context.Risks.Any(r => r.RiskId == m.RiskId && r.OrgId == orgId)
+                )
+                .ToListAsync();
+        }
+
         public async Task<Mitigation?> GetByIdAsync(long id)
         {
             return await _context.Mitigations.FindAsync(id);
