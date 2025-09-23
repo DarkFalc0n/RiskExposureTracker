@@ -14,6 +14,8 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    env:
+      TAILWIND_DISABLE_OXIDE: '1'
     permissions:
        id-token: write
        contents: read
@@ -27,6 +29,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+      - name: Install dependencies (client)
+        working-directory: client
+        run: npm ci
+      - name: Build (client)
+        working-directory: client
+        env:
+          TAILWIND_DISABLE_OXIDE: '1'
+        run: npm run build
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
       - name: Get Id Token
@@ -49,6 +59,7 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
+          skip_app_build: true
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
