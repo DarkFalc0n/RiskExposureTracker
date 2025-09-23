@@ -63,7 +63,27 @@ namespace RiskExposureTracker
                     "AllowReactApp",
                     policy =>
                     {
-                        policy.AllowAnyOrigin();
+                        policy
+                            .SetIsOriginAllowed(origin =>
+                            {
+                                if (string.IsNullOrEmpty(origin))
+                                    return false;
+                                try
+                                {
+                                    var host = new Uri(origin).Host;
+                                    return host == "localhost"
+                                        || host.EndsWith(
+                                            ".azurestaticapps.net",
+                                            StringComparison.OrdinalIgnoreCase
+                                        );
+                                }
+                                catch
+                                {
+                                    return false;
+                                }
+                            })
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     }
                 );
             });
