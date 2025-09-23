@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "http://retapi-h7eqe9b0emadd0am.canadacentral-01.azurewebsites.net/api",
   timeout: 10000,
 });
 
