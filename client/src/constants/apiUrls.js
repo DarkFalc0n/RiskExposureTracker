@@ -2,6 +2,7 @@ export const API_URLS = {
     LOGIN: `/auth/login`,
     REGISTER: `/auth/register`,
     ME: `/auth/me`,
+    GET_RISKS_BY_ORG: `/risks/{orgId}`,
     ADD_RISK: `/risks`,
     UPDATE_RISK: `/risks/{id}`,
     ADD_MITIGATION: `/mitigations`,
@@ -10,5 +11,4 @@ export const API_URLS = {
     GET_MITIGATIONS_BY_RISK: `/mitigations/{riskId}`,
     GET_ALL_ORGANIZATIONS: `/orgs`,
     GET_ALL_RISKS: `/risks`,
-    GET_RISKS_BY_ORG: `/risks/{orgId}`,
 };

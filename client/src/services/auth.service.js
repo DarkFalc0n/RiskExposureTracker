@@ -13,6 +13,11 @@ export const register = async (name, sector, region, contact, email, password) =
     return response.data;
 }
 
+export const logout = async () => {
+    localStorage.removeItem("token");
+    window.location.href = "/auth/login";
+}
+
 export const getUser = async () => {
     const response = await api.get(API_URLS.ME);
     return response.data;
