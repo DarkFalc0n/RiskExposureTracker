@@ -15,8 +15,11 @@ import { loginSchema } from '@/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 import RiskLensLogo from '@/assets/Risklens_Logo.png';
+import { login as loginApi } from '@/services/auth.service';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -25,8 +28,13 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values) => {
-    console.log('login submit', values);
+  const onSubmit = async (values) => {
+    try {
+      await loginApi(values.email, values.password);
+      navigate('/');
+    } catch (err) {
+      console.error('Login failed', err);
+    }
   };
 
   return (

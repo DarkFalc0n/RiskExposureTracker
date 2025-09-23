@@ -1,11 +1,12 @@
-﻿using RiskExposureTracker.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using RiskExposureTracker.Models;
 
 namespace RiskExposureTracker.Repositories
 {
     public interface IOrganizationRepository
     {
-        Task<IEnumerable<Organization>> GetAllOrganizationsAsync();
-        Task<Organization> GetByIdAsync(long orgId);
-        Task UpdateAsync(Organization organization);
+        Task<IEnumerable<OrgModel>> GetAllOrganizationsAsync();
+        Task<OrgModel?> GetByIdAsync(string orgId);
+        Task<IdentityResult> UpdateAsync(OrgModel organization);
     }
 }

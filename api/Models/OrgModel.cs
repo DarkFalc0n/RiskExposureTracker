@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace RiskExposureTracker.Models
 {
@@ -9,5 +10,8 @@ namespace RiskExposureTracker.Models
         public required Region Region { get; set; }
         public required string Contact { get; set; }
         public string? Role { get; set; }
+        public ICollection<Risk>? Risks { get; set; }
+        public ICollection<ExposureSummary>? ExposureSummaries { get; set; }
+        public ICollection<RiskReport>? RiskReports { get; set; }
     }
 }

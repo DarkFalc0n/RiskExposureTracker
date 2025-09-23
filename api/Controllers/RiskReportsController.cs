@@ -21,7 +21,7 @@ namespace RiskExposureTracker.Controllers
         }
 
         [HttpGet("{orgId}")]
-        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrg(long orgId)
+        public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrg(string orgId)
         {
             var reports = await _service.GetReportsByOrgAsync(orgId);
             if (!reports.Any())
@@ -33,7 +33,7 @@ namespace RiskExposureTracker.Controllers
 
         [HttpGet("{orgId}/{period}")]
         public async Task<ActionResult<IEnumerable<RiskReport>>> GetReportsByOrgAndPeriod(
-            long orgId,
+            string orgId,
             string period
         )
         {

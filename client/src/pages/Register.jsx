@@ -22,8 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { register as registerApi } from '@/services/auth.service';
+import { useNavigate } from 'react-router';
 
 const Register = () => {
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -37,8 +40,20 @@ const Register = () => {
     },
   });
 
-  const onSubmit = (values) => {
-    console.log('register submit', values);
+  const onSubmit = async (values) => {
+    try {
+      await registerApi(
+        values.name,
+        values.sector,
+        values.region,
+        values.contact,
+        values.email,
+        values.password
+      );
+      navigate('/');
+    } catch (err) {
+      console.error('Register failed', err);
+    }
   };
 
   return (

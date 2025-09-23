@@ -1,0 +1,15 @@
+export const API_URLS = {
+    LOGIN: `/auth/login`,
+    REGISTER: `/auth/register`,
+    ME: `/auth/me`,
+    GET_RISKS_BY_ORG: `/risks/{orgId}`,
+    ADD_RISK: `/risks`,
+    UPDATE_RISK: `/risks/{id}`,
+    ADD_MITIGATION: `/mitigations`,
+    UPDATE_MITIGATION: `/mitigations/{id}`,
+    GET_ALL_MITIGATIONS: `/mitigations`,
+    GET_MITIGATIONS_BY_RISK: `/mitigations/{riskId}`,
+    GET_MITIGATIONS_BY_ORG: `/mitigations/org/{orgId}`,
+    GET_ALL_ORGANIZATIONS: `/orgs`,
+    GET_ALL_RISKS: `/risks`,
+};

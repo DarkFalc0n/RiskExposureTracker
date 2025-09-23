@@ -10,7 +10,7 @@ namespace RiskExposureTracker.Models
 
         [Required]
         [ForeignKey("Organization")]
-        public long OrgId { get; set; }
+        public string OrgId { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(50)]
@@ -21,6 +21,6 @@ namespace RiskExposureTracker.Models
 
         public DateTime LastUpdate { get; set; }
 
-        public Organization? Organizations { get; set; }
+        public OrgModel? Organizations { get; set; }
     }
 }
