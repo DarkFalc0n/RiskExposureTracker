@@ -12,13 +12,13 @@ namespace RiskExposureTracker.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAsync(long orgId)
+        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAsync(string orgId)
         {
             return await _repository.GetReportsByOrgAsync(orgId);
         }
 
         public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(
-            long orgId,
+            string orgId,
             string period
         )
         {

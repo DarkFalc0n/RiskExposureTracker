@@ -13,7 +13,7 @@ namespace RiskExposureTracker.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAsync(long orgId)
+        public async Task<IEnumerable<RiskReport>> GetReportsByOrgAsync(string orgId)
         {
             return await _context
                 .RiskReports.Where(r => r.OrgId == orgId)
@@ -24,7 +24,7 @@ namespace RiskExposureTracker.Repositories
         // ---------------------------------------------------------------------------------------------------------------
 
         public async Task<IEnumerable<RiskReport>> GetReportsByOrgAndPeriodAsync(
-            long orgId,
+            string orgId,
             string period
         )
         {

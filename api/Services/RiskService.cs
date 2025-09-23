@@ -15,7 +15,12 @@ namespace RiskExposureTracker.Services
             return await _repository.AddRiskAsync(risk);
         }
 
-        public async Task<List<Risk>> GetRisksByOrgAsync(long orgId)
+        public async Task<List<Risk>> GetAllRisksAsync()
+        {
+            return await _repository.GetAllRisksAsync();
+        }
+
+        public async Task<List<Risk>> GetRisksByOrgAsync(string orgId)
         {
             return await _repository.GetRisksByOrgAsync(orgId);
         }

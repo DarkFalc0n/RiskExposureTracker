@@ -1,9 +1,15 @@
 import { createBrowserRouter } from 'react-router';
 import AppLayout from '@/AppLayout';
-import Home from '@/pages/Home';
+import Dashboard from '@/pages/Dashboard';
 import AuthLayout from '@/layouts/AuthLayout';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import { UserProvider } from '@/context/UserContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import Risks from '@/pages/Risks';
+import Mitigations from '@/pages/Mitigations';
+import Reports from '@/pages/Reports';
+import Profile from '@/pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -22,11 +28,33 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <UserProvider>
+          <AppLayout />
+        </UserProvider>
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <Dashboard />,
+      },
+      {
+        path: '/risks',
+        element: <Risks />,
+      },
+      {
+        path: '/mitigations',
+        element: <Mitigations />,
+      },
+      {
+        path: '/reports',
+        element: <Reports />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
       },
     ],
   },

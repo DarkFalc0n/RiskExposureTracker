@@ -12,7 +12,7 @@ namespace RiskExposureTracker
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder
@@ -33,9 +33,9 @@ namespace RiskExposureTracker
             var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
             var connStr =
-                $"Server={dbHost};Database={dbName};User ID={dbUser};Password={dbPassword};Encrypt=True;TrustServerCertificate=True;";
+                $"Server={dbHost};Database={dbName};User ID={dbUser};Password={dbPassword};Encrypt=True;TrustServerCertificate=True;Connection Timeout=60";
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connStr)
+                options.UseSqlServer(connStr, sqlOptions => sqlOptions.EnableRetryOnFailure())
             );
 
             builder
@@ -51,6 +51,10 @@ namespace RiskExposureTracker
             // Dependency injection
             builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+            builder.Services.AddScoped<IRiskRepository, RiskRepository>();
+            builder.Services.AddScoped<IRiskService, RiskService>();
+            builder.Services.AddScoped<IMitigationsRepository, MitigationsRepository>();
+            builder.Services.AddScoped<IMitigationsService, MitigationsService>();
 
             // Add CORS policy here
             builder.Services.AddCors(options =>
@@ -120,6 +124,11 @@ namespace RiskExposureTracker
             app.UseAuthorization();
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                await Data.SeedData.InitializeAsync(scope.ServiceProvider);
+            }
             app.Run();
         }
     }

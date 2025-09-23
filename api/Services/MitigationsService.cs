@@ -12,17 +12,14 @@ namespace RiskExposureTracker.Services
             _repository = repository;
         }
 
-        // Create mitigation with business rules
         public async Task<Mitigation> CreateMitigationAsync(Mitigation mitigation)
         {
-            // Check if Risk exists
             var riskExists = await _repository.RiskExistsAsync(mitigation.RiskId);
             if (!riskExists)
             {
                 throw new ArgumentException($"Risk with ID {mitigation.RiskId} does not exist.");
             }
 
-            // Default status if not provided
             if (string.IsNullOrEmpty(mitigation.Status))
             {
                 mitigation.Status = "Open";
@@ -31,10 +28,30 @@ namespace RiskExposureTracker.Services
             return await _repository.AddMitigationAsync(mitigation);
         }
 
-        // Get all mitigations for a Risk
         public async Task<IEnumerable<Mitigation>> GetMitigationsByRiskAsync(long riskId)
         {
             return await _repository.GetMitigationsByRiskAsync(riskId);
+        }
+
+        public async Task<IEnumerable<Mitigation>> GetMitigationsByOrgIdAsync(string orgId)
+        {
+            return await _repository.GetMitigationsByOrgIdAsync(orgId);
+        }
+
+        public async Task<Mitigation?> UpdateMitigationAsync(long id, Mitigation updated)
+        {
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+            {
+                return null;
+            }
+
+            existing.Action = updated.Action;
+            existing.Owner = updated.Owner;
+            existing.Deadline = updated.Deadline;
+            existing.Status = updated.Status;
+
+            return await _repository.UpdateMitigationAsync(existing);
         }
     }
 }

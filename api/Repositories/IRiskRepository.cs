@@ -5,8 +5,10 @@ namespace RiskExposureTracker.Repositories
     public interface IRiskRepository
     {
         Task<Risk> AddRiskAsync(Risk risk);
-        Task<List<Risk>> GetRisksByOrgAsync(long orgId);
+        Task<List<Risk>> GetAllRisksAsync();
+
         Task<Risk?> GetRiskByIdAsync(long id);
+        Task<List<Risk>> GetRisksByOrgAsync(string orgId);
         Task<Risk?> UpdateRiskAsync(Risk risk);
     }
 }

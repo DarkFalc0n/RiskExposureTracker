@@ -171,7 +171,11 @@ namespace api.Migrations
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("OrgId")
+                    b.Property<string>("OrgId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long?>("OrganizationOrgId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("TotalAmt")
@@ -180,6 +184,8 @@ namespace api.Migrations
                     b.HasKey("SummaryId");
 
                     b.HasIndex("OrgId");
+
+                    b.HasIndex("OrganizationOrgId");
 
                     b.ToTable("ExposureSummaries");
                 });
@@ -340,7 +346,7 @@ namespace api.Migrations
 
                     b.HasKey("OrgId");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organization");
                 });
 
             modelBuilder.Entity("RiskExposureTracker.Models.Risk", b =>
@@ -357,7 +363,9 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -367,7 +375,11 @@ namespace api.Migrations
                     b.Property<decimal>("Exposure")
                         .HasColumnType("decimal(12,2)");
 
-                    b.Property<long>("OrgId")
+                    b.Property<string>("OrgId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long?>("OrganizationOrgId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Status")
@@ -378,6 +390,8 @@ namespace api.Migrations
                     b.HasKey("RiskId");
 
                     b.HasIndex("OrgId");
+
+                    b.HasIndex("OrganizationOrgId");
 
                     b.ToTable("Risks");
                 });
@@ -398,7 +412,11 @@ namespace api.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<long>("OrgId")
+                    b.Property<string>("OrgId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long?>("OrganizationOrgId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Period")
@@ -409,6 +427,8 @@ namespace api.Migrations
                     b.HasKey("ReportId");
 
                     b.HasIndex("OrgId");
+
+                    b.HasIndex("OrganizationOrgId");
 
                     b.ToTable("RiskReports");
                 });
@@ -466,11 +486,15 @@ namespace api.Migrations
 
             modelBuilder.Entity("RiskExposureTracker.Models.ExposureSummary", b =>
                 {
-                    b.HasOne("RiskExposureTracker.Models.Organization", "Organizations")
+                    b.HasOne("RiskExposureTracker.Models.OrgModel", "Organizations")
                         .WithMany("ExposureSummaries")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("RiskExposureTracker.Models.Organization", null)
+                        .WithMany("ExposureSummaries")
+                        .HasForeignKey("OrganizationOrgId");
 
                     b.Navigation("Organizations");
                 });
@@ -488,24 +512,41 @@ namespace api.Migrations
 
             modelBuilder.Entity("RiskExposureTracker.Models.Risk", b =>
                 {
-                    b.HasOne("RiskExposureTracker.Models.Organization", "Organizations")
+                    b.HasOne("RiskExposureTracker.Models.OrgModel", "Organizations")
                         .WithMany("Risks")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("RiskExposureTracker.Models.Organization", null)
+                        .WithMany("Risks")
+                        .HasForeignKey("OrganizationOrgId");
 
                     b.Navigation("Organizations");
                 });
 
             modelBuilder.Entity("RiskExposureTracker.Models.RiskReport", b =>
                 {
-                    b.HasOne("RiskExposureTracker.Models.Organization", "Organizations")
+                    b.HasOne("RiskExposureTracker.Models.OrgModel", "Organizations")
                         .WithMany("RiskReports")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RiskExposureTracker.Models.Organization", null)
+                        .WithMany("RiskReports")
+                        .HasForeignKey("OrganizationOrgId");
+
                     b.Navigation("Organizations");
+                });
+
+            modelBuilder.Entity("RiskExposureTracker.Models.OrgModel", b =>
+                {
+                    b.Navigation("ExposureSummaries");
+
+                    b.Navigation("RiskReports");
+
+                    b.Navigation("Risks");
                 });
 
             modelBuilder.Entity("RiskExposureTracker.Models.Organization", b =>
