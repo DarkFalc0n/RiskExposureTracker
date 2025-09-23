@@ -68,6 +68,7 @@ namespace RiskExposureTracker
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .DisallowCredentials();
+                        policy.AllowAnyOrigin();
                     }
                 );
             });
